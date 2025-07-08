@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templo Gamer - Rifas</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Verdana, sans-serif;
+      background: #0d0d0d url('https://www.transparenttextures.com/patterns/circuits.png') repeat;
+      color: #00ffcc;
+      padding-top: 50px;
+    }
+
+    /* Barra superior fija - color completo */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+      background: #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .top-bar a {
+      color: #000000;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      font-family: Verdana, sans-serif;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+
+    .top-bar a:hover {
+      background-color: #00cc66;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: #00ff88;
+      text-shadow: 0 0 15px #00ff88;
+    }
+
+    header h2 {
+      font-size: 1.5rem;
+      color: #00ccff;
+      text-shadow: 0 0 10px #00ccff;
+    }
+
+    .section {
+      text-align: center;
+      margin: 40px 20px;
+    }
+
+    .highlight {
+      font-size: 1.2rem;
+      color: #ffea00;
+      text-shadow: 0 0 10px #ffea00;
+    }
+
+    .controller {
+      width: 300px;
+      margin-top: 20px;
+      filter: drop-shadow(0 0 10px #00ffff);
+    }
+
+    .about {
+      max-width: 600px;
+      margin: 40px auto;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #cccccc;
+      text-align: center;
+    }
+
+    /* Contenedor para los botones lado a lado */
+    .buttons-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+
+    /* Estilo para los botones */
+    .action-btn {
+      display: inline-block;
+      padding: 12px 35px;
+      background: linear-gradient(to bottom, #00ff88, #00cc66);
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: Verdana, sans-serif;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.6);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 255, 136, 0.8);
+      background: linear-gradient(to bottom, #00ff88, #00ff88);
+    }
+
+    .action-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Botón patrocinado */
+    .action-btn.patrocinado {
+      background: linear-gradient(to bottom, #ffea00, #ffd700);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(255, 234, 0, 0.6);
+    }
+
+    .action-btn.patrocinado:hover {
+      background: linear-gradient(to bottom, #ffea00, #ffea00);
+      box-shadow: 0 6px 20px rgba(255, 234, 0, 0.8);
+    }
+
+    /* ESTILOS  */
+    .rifa-section {
+      background: rgba(0, 20, 20, 0.7);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 40px auto;
+      max-width: 800px;
+      border: 2px solid #00ff88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+      text-align: center;
+    }
+    
+    .rifa-title {
+      font-size: 2rem;
+      color: #00ff88;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ff88;
+    }
+    
+    /* TABLA DE NÚMEROS 00-99 */
+    .numeros-tabla {
+      margin: 40px auto;
+      max-width: 800px;
+      text-align: center;
+    }
+
+    .numeros-tabla h2 {
+      font-size: 2rem;
+      color: #00ff88;
+      text-shadow: 0 0 10px #00ff88;
+      margin-bottom: 20px;
+    }
+
+    .tabla-subtitle {
+      font-size: 1.1rem;
+      color: #00ccff;
+      margin-bottom: 25px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+    }
+
+    .numeros-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
+      background: rgba(0, 20, 20, 0.7);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid #00ff88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+
+    .numero-cell {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #333;
+      color: #000;
+      transition: transform 0.2s;
+    }
+
+    .numero-cell:hover {
+      transform: scale(1.1);
+      border-color: #fff;
+    }
+
+    /* COLORES PARA CADA NÚMERO - MODIFICAR */
+    .num-00 { background-color: #3eff00; }
+    .num-01 { background-color: #3eff00; }
+    .num-02 { background-color: #3eff00; }
+    .num-03 { background-color: #3eff00; }
+    .num-04 { background-color: #3eff00; }
+    .num-05 { background-color: #3eff00; }
+    .num-06 { background-color: #3eff00; }
+    .num-07 { background-color: #3eff00; }
+    .num-08 { background-color: #3eff00; }
+    .num-09 { background-color: #3eff00; }
+    
+    .num-10 { background-color: #3eff00; }
+    .num-11 { background-color: #3eff00; }
+    .num-12 { background-color: #3eff00; }
+    .num-13 { background-color: #3eff00; }
+    .num-14 { background-color: #3eff00; }
+    .num-15 { background-color: #3eff00; }
+    .num-16 { background-color: #3eff00; }
+    .num-17 { background-color: #3eff00; }
+    .num-18 { background-color: #3eff00; }
+    .num-19 { background-color: #3eff00; }
+    
+    .num-20 { background-color: #3eff00; }
+    .num-21 { background-color: #3eff00; }
+    .num-22 { background-color: #3eff00; }
+    .num-23 { background-color: #3eff00; }
+    .num-24 { background-color: #3eff00; }
+    .num-25 { background-color: #3eff00; }
+    .num-26 { background-color: #3eff00; }
+    .num-27 { background-color: #3eff00; }
+    .num-28 { background-color: #3eff00; }
+    .num-29 { background-color: #3eff00; }
+    
+    .num-30 { background-color: #3eff00; }
+    .num-31 { background-color: #3eff00; }
+    .num-32 { background-color: #3eff00; }
+    .num-33 { background-color: #3eff00; }
+    .num-34 { background-color: #3eff00; }
+    .num-35 { background-color: #3eff00; }
+    .num-36 { background-color: #3eff00; }
+    .num-37 { background-color: #3eff00; }
+    .num-38 { background-color: #3eff00; }
+    .num-39 { background-color: #3eff00; }
+    
+    .num-40 { background-color: #3eff00; }
+    .num-41 { background-color: #3eff00; }
+    .num-42 { background-color: #3eff00; }
+    .num-43 { background-color: #3eff00; }
+    .num-44 { background-color: #3eff00; }
+    .num-45 { background-color: #3eff00; }
+    .num-46 { background-color: #3eff00; }
+    .num-47 { background-color: #3eff00; }
+    .num-48 { background-color: #3eff00; }
+    .num-49 { background-color: #3eff00; }
+    
+    .num-50 { background-color: #3eff00; }
+    .num-51 { background-color: #3eff00; }
+    .num-52 { background-color: #3eff00; }
+    .num-53 { background-color: #3eff00; }
+    .num-54 { background-color: #3eff00; }
+    .num-55 { background-color: #3eff00; }
+    .num-56 { background-color: #3eff00; }
+    .num-57 { background-color: #3eff00; }
+    .num-58 { background-color: #3eff00; }
+    .num-59 { background-color: #3eff00; }
+    
+    .num-60 { background-color: #3eff00; }
+    .num-61 { background-color: #3eff00; }
+    .num-62 { background-color: #3eff00; }
+    .num-63 { background-color: #3eff00; }
+    .num-64 { background-color: #3eff00; }
+    .num-65 { background-color: #3eff00; }
+    .num-66 { background-color: #3eff00; }
+    .num-67 { background-color: #3eff00; }
+    .num-68 { background-color: #3eff00; }
+    .num-69 { background-color: #3eff00; }
+    
+    .num-70 { background-color: #3eff00; }
+    .num-71 { background-color: #3eff00; }
+    .num-72 { background-color: #3eff00; }
+    .num-73 { background-color: #3eff00; }
+    .num-74 { background-color: #3eff00; }
+    .num-75 { background-color: #3eff00; }
+    .num-76 { background-color: #3eff00; }
+    .num-77 { background-color: #3eff00; }
+    .num-78 { background-color: #3eff00; }
+    .num-79 { background-color: #3eff00; }
+    
+    .num-80 { background-color: #3eff00; }
+    .num-81 { background-color: #3eff00; }
+    .num-82 { background-color: #3eff00; }
+    .num-83 { background-color: #3eff00; }
+    .num-84 { background-color: #3eff00; }
+    .num-85 { background-color: #3eff00; }
+    .num-86 { background-color: #3eff00; }
+    .num-87 { background-color: #3eff00; }
+    .num-88 { background-color: #3eff00; }
+    .num-89 { background-color: #3eff00; }
+    
+    .num-90 { background-color: #3eff00; }
+    .num-91 { background-color: #3eff00; }
+    .num-92 { background-color: #3eff00; }
+    .num-93 { background-color: #3eff00; }
+    .num-94 { background-color: #3eff00; }
+    .num-95 { background-color: #3eff00; }
+    .num-96 { background-color: #3eff00; }
+    .num-97 { background-color: #3eff00; }
+    .num-98 { background-color: #3eff00; }
+    .num-99 { background-color: #3eff00; }
+    
+    /* INDICADORES DE ESTADO */
+    .status-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: rgba(0, 30, 30, 0.5);
+      transition: all 0.3s ease;
+    }
+    
+    .status-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    /* Verde fosforescente para "Disponible" */
+    .status-indicator {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+    
+    .status-available {
+      background: #32ff00;
+      box-shadow: 0 0 10px #32ff00, 0 0 20px #32ff00;
+      animation: pulse-available 1.5s infinite;
+    }
+    
+    /* Rojo para "Ocupado" */
+    .status-taken {
+      background: #ff4444;
+      box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+    }
+    
+    /* Azul para "Separado" */
+    .status-reserved {
+      background: #0088ff;
+      box-shadow: 0 0 10px rgba(0, 136, 255, 0.5);
+    }
+    
+    /* Animación para el indicador disponible */
+    @keyframes pulse-available {
+      0% {
+        box-shadow: 0 0 0 0 rgba(50, 255, 0, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(50, 255, 0, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(50, 255, 0, 0);
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .status-indicators {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .status-item {
+        width: 100%;
+        max-width: 250px;
+      }
+      
+      .numeros-grid {
+        grid-template-columns: repeat(8, 1fr);
+      }
+      
+      .numero-cell {
+        width: 40px;
+        height: 40px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .numeros-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      
+      .buttons-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra superior fija - color completo -->
+  <div class="top-bar">
+    <a href="https://ejemplo.com/soporte" target="_blank">SOPORTE </a>
+  </div>
+
+  <header>
+    <p align="center">
+      <img src="https://cdn.glitch.global/c1c4da4a-c625-4541-9228-94edcd4409a3/nn.png?v=1750641601053" alt="Templo Gamer Logo" width="350">
+    </p>
+    <h2 align="center" style="font-size: 30pt">RIFAS GAMERS</h2>
+  </header>
+
+  <div class="section">
+    <p class="highlight" style="font-size: 16pt">PREMIO DESTACADO</p>
+    <img src="https://cdn.glitch.global/c1c4da4a-c625-4541-9228-94edcd4409a3/ca.PNG?v=1750638903584" alt="Mando Bluetooth" class="controller">
+    <p class="highlight" style="font-size: 16pt">MANDO BLUETOOTH</p>
+    
+    <!-- Botones lado a lado -->
+    <div class="buttons-container">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGkdDaJ-7Zoa5JPk0YuhZ-Hfu_YKhzEHFQlw4UugP5HjzhZQ/viewform" class="action-btn">Participar en la rifa</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdGkdDaJ-7Zoa5JPk0YuhZ-Hfu_YKhzEHFQlw4UugP5HjzhZQ/viewform" class="action-btn patrocinado">Participar como Patrocinado</a>
+    </div>
+  </div>
+
+  <div class="about">
+    <h2 style="font-size: 20pt"><font color="#00FF00">¿Quiénes somos?</font></h2>
+    <p style="font-size: 13pt">
+      <font color="#00FF00">En el Templo Gamer fusionamos la cultura ancestral con la pasión por los 
+      videojuegos.
+    </font>
+    </p>
+    <p style="font-size: 13pt">
+      <font color="#00FF00">Nuestra misión es apoyar a aquellos que disfrutan del mundo de los 
+      videojuegos a través de rifas creativas e inclusivas.</font></p>
+    <p style="font-size: 13pt">
+      <font color="#00FF00">Con el apoyo del emprendedor <strong>PayPanito</strong> y con <strong>PA Y PANITA</strong>.</font></p>
+  </div>
+
+  <!-- TABLA DE NÚMEROS 00-99 -->
+  <div class="numeros-tabla">
+    <h2>Números Disponibles</h2>
+
+    <div class="status-indicators">
+      <div class="status-item">
+        <span class="status-indicator status-available"></span>Disponible
+      </div>
+      <div class="status-item">
+        <span class="status-indicator status-taken"></span>Ocupado
+      </div>
+      <div class="status-item">
+        <span class="status-indicator status-reserved"></span>Separado
+      </div>
+    </div>
+
+    <div class="numeros-grid">
+      <div class="numero-cell num-00">00</div>
+      <div class="numero-cell num-01">01</div>
+      <div class="numero-cell num-02">02</div>
+      <div class="numero-cell num-03">03</div>
+      <div class="numero-cell num-04">04</div>
+      <div class="numero-cell num-05">05</div>
+      <div class="numero-cell num-06">06</div>
+      <div class="numero-cell num-07">07</div>
+      <div class="numero-cell num-08">08</div>
+      <div class="numero-cell num-09">09</div>
+      
+      <div class="numero-cell num-10">10</div>
+      <div class="numero-cell num-11">11</div>
+      <div class="numero-cell num-12">12</div>
+      <div class="numero-cell num-13">13</div>
+      <div class="numero-cell num-14">14</div>
+      <div class="numero-cell num-15">15</div>
+      <div class="numero-cell num-16">16</div>
+      <div class="numero-cell num-17">17</div>
+      <div class="numero-cell num-18">18</div>
+      <div class="numero-cell num-19">19</div>
+      
+      <div class="numero-cell num-20">20</div>
+      <div class="numero-cell num-21">21</div>
+      <div class="numero-cell num-22">22</div>
+      <div class="numero-cell num-23">23</div>
+      <div class="numero-cell num-24">24</div>
+      <div class="numero-cell num-25">25</div>
+      <div class="numero-cell num-26">26</div>
+      <div class="numero-cell num-27">27</div>
+      <div class="numero-cell num-28">28</div>
+      <div class="numero-cell num-29">29</div>
+      
+      <div class="numero-cell num-30">30</div>
+      <div class="numero-cell num-31">31</div>
+      <div class="numero-cell num-32">32</div>
+      <div class="numero-cell num-33">33</div>
+      <div class="numero-cell num-34">34</div>
+      <div class="numero-cell num-35">35</div>
+      <div class="numero-cell num-36">36</div>
+      <div class="numero-cell num-37">37</div>
+      <div class="numero-cell num-38">38</div>
+      <div class="numero-cell num-39">39</div>
+      
+      <div class="numero-cell num-40">40</div>
+      <div class="numero-cell num-41">41</div>
+      <div class="numero-cell num-42">42</div>
+      <div class="numero-cell num-43">43</div>
+      <div class="numero-cell num-44">44</div>
+      <div class="numero-cell num-45">45</div>
+      <div class="numero-cell num-46">46</div>
+      <div class="numero-cell num-47">47</div>
+      <div class="numero-cell num-48">48</div>
+      <div class="numero-cell num-49">49</div>
+      
+      <div class="numero-cell num-50">50</div>
+      <div class="numero-cell num-51">51</div>
+      <div class="numero-cell num-52">52</div>
+      <div class="numero-cell num-53">53</div>
+      <div class="numero-cell num-54">54</div>
+      <div class="numero-cell num-55">55</div>
+      <div class="numero-cell num-56">56</div>
+      <div class="numero-cell num-57">57</div>
+      <div class="numero-cell num-58">58</div>
+      <div class="numero-cell num-59">59</div>
+      
+      <div class="numero-cell num-60">60</div>
+      <div class="numero-cell num-61">61</div>
+      <div class="numero-cell num-62">62</div>
+      <div class="numero-cell num-63">63</div>
+      <div class="numero-cell num-64">64</div>
+      <div class="numero-cell num-65">65</div>
+      <div class="numero-cell num-66">66</div>
+      <div class="numero-cell num-67">67</div>
+      <div class="numero-cell num-68">68</div>
+      <div class="numero-cell num-69">69</div>
+      
+      <div class="numero-cell num-70">70</div>
+      <div class="numero-cell num-71">71</div>
+      <div class="numero-cell num-72">72</div>
+      <div class="numero-cell num-73">73</div>
+      <div class="numero-cell num-74">74</div>
+      <div class="numero-cell num-75">75</div>
+      <div class="numero-cell num-76">76</div>
+      <div class="numero-cell num-77">77</div>
+      <div class="numero-cell num-78">78</div>
+      <div class="numero-cell num-79">79</div>
+      
+      <div class="numero-cell num-80">80</div>
+      <div class="numero-cell num-81">81</div>
+      <div class="numero-cell num-82">82</div>
+      <div class="numero-cell num-83">83</div>
+      <div class="numero-cell num-84">84</div>
+      <div class="numero-cell num-85">85</div>
+      <div class="numero-cell num-86">86</div>
+      <div class="numero-cell num-87">87</div>
+      <div class="numero-cell num-88">88</div>
+      <div class="numero-cell num-89">89</div>
+      
+      <div class="numero-cell num-90">90</div>
+      <div class="numero-cell num-91">91</div>
+      <div class="numero-cell num-92">92</div>
+      <div class="numero-cell num-93">93</div>
+      <div class="numero-cell num-94">94</div>
+      <div class="numero-cell num-95">95</div>
+      <div class="numero-cell num-96">96</div>
+      <div class="numero-cell num-97">97</div>
+      <div class="numero-cell num-98">98</div>
+      <div class="numero-cell num-99">99</div>
+    </div>
+  </div>
+
+</body>
+</html>
